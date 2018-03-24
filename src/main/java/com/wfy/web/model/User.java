@@ -1,25 +1,23 @@
 package com.wfy.web.model;
 
-import com.wfy.web.model.enums.UserAuthority;
-
 import java.util.Date;
 
 /**
  * Created by wfy on 18-3-24, good luck.
  */
 public class User {
-    private int id;
+    private Long id;
     private String username;
     private String password;
     private Date createTime;
     private Date lastLoginTime;
     private int authority;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -61,5 +59,17 @@ public class User {
 
     public void setAuthority(int authority) {
         this.authority = authority;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", createTime=" + createTime +
+                ", lastLoginTime=" + lastLoginTime +
+                ", authority=" + authority +
+                '}';
     }
 }

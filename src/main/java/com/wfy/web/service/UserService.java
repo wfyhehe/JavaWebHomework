@@ -1,10 +1,11 @@
 package com.wfy.web.service;
 
-import com.wfy.web.mapper.UserMapper;
+import com.wfy.web.dao.UserDao;
 import com.wfy.web.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,26 +15,27 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserDao userDao;
 
     public List<User> list() {
-        return userMapper.list();
+        return userDao.list();
     }
 
-    public User retrieve(int id) {
-        return userMapper.retrieve(id);
+    public User getUserByUsername(String username) {
+        return userDao.retrieveByUsername(username);
     }
 
     public void create(User user) {
-        userMapper.create(user);
+        user.setCreateTime(new Date());
+        userDao.create(user);
     }
 
     public void update(User user) {
-        userMapper.update(user);
+        userDao.update(user);
     }
 
-    public void delete(int id) {
-        userMapper.delete(id);
+    public void delete(Long id) {
+        userDao.delete(id);
     }
 
 
