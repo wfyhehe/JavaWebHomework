@@ -12,5 +12,5 @@ CREATE INDEX index_du_user_id
   ON t_document_user (user_id);
 
 CREATE INDEX index_du_document_id
-  ON t_document_user (document);
+  ON t_document_user (document_id);
 

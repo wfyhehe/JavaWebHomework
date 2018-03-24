@@ -4,7 +4,6 @@ CREATE TABLE t_user (
   password        CHAR(32)           NOT NULL,
   create_time     DATETIME,
   last_login_time DATETIME,
-  status          TINYINT            NOT NULL, # 0:启用,1:停用,2:删除
   authority       TINYINT            NOT NULL # 0: superadmin 1: 增删改查 2:增查 3:只读
 );
 
