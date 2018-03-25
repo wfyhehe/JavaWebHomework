@@ -9,10 +9,12 @@ import com.wfy.web.utils.MD5;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -55,8 +57,14 @@ public class UserController {
                 .claim("uid", userFromDb.getId()).setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, Const.JWT_SECRET_KEY).compact();
         tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
-
         return new ResponseEntity<>(jwtToken, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping(value = "/api/user/signout")
+    public ResponseEntity<String> signOut(HttpServletRequest request) {
+        String uid = (String) request.getAttribute("uid");
+        tokenService.delete(uid);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @PostMapping(value = "/api/user")

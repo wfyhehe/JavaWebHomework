@@ -16,7 +16,7 @@ public class TokenService {
 
     public boolean checkToken(Token token) {
         Token tokenFromDb = tokenDao.retrieve(token.getId());
-        return tokenFromDb.equals(token);
+        return token.equals(tokenFromDb);
     }
 
     public void createOrUpdate(Token token) {
