@@ -100,7 +100,7 @@ public interface DocumentDao {
     void delete(Long id);
 
     @Update("UPDATE t_document SET " +
-            "deleted=falsr " +
+            "deleted=false " +
             "WHERE id =#{id}"
     )
     void recover(Long id);
