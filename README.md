@@ -10,6 +10,8 @@ insert into t_user (username, password, authority)
 values ("admin", "21232f297a57a5a743894a0e4a801fc3", 100);
 ```
 
+- run `Application` then try visit `127.0.0.1:8080`
+
 ### User
 *Sign Up*
 
@@ -42,7 +44,7 @@ see `common.UserAuthority` for more info
 }
 ```
 return
-```json
+```
 (your token)
 ```
 place it in `Headers: Authorization:{token}` everytime you ajax
