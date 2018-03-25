@@ -31,13 +31,24 @@ public class UserController {
     private TokenService tokenService;
 
     @GetMapping(value = "/api/user")
-    public ResponseEntity<List<User>> list() {
+    public ResponseEntity<List<User>> list(HttpServletRequest request) {
+        Integer authority = (Integer) request.getAttribute("authority");
+        if (authority < UserAuthority.SUPER_ADMIN) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         List<User> users = userService.list();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping(value = "/api/user/{username}")
-    public ResponseEntity<User> retrieve(@PathVariable String username) {
+    public ResponseEntity<User> retrieve(
+            @PathVariable String username,
+            HttpServletRequest request
+    ) {
+        Integer authority = (Integer) request.getAttribute("authority");
+        if (authority < UserAuthority.SUPER_ADMIN) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         User user = userService.getUserByUsername(username);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

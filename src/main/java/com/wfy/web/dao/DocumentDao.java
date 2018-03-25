@@ -87,8 +87,7 @@ public interface DocumentDao {
 
     @Update("UPDATE t_document SET " +
             "title=#{title}," +
-            "content=#{content}, " +
-            "status=#{status} " +
+            "content=#{content} " +
             "WHERE id =#{id}"
     )
     void update(Document document);
@@ -103,6 +102,6 @@ public interface DocumentDao {
             "deleted=false " +
             "WHERE id =#{id}"
     )
-    void recover(Long id);
+    void restore(Long id);
 
 }

@@ -38,7 +38,7 @@ public class DocumentController {
     }
 
     @PostMapping(value = "/api/document")
-    public ResponseEntity<String> retrieve(
+    public ResponseEntity<String> create(
             @RequestBody Document document,
             HttpServletRequest request
     ) {
@@ -57,7 +57,7 @@ public class DocumentController {
             @PathVariable Long documentId,
             HttpServletRequest request
     ) {
-        Long uid = (Long) request.getAttribute("uid");
+        Long uid = Long.valueOf((String)request.getAttribute("uid"));
         Document oldDocument = documentService.retrieve(documentId);
         Integer authority = (Integer) request.getAttribute("authority");
         boolean isContributor = false;
@@ -123,8 +123,8 @@ public class DocumentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/api/document/{documentId}/recover")
-    public ResponseEntity<String> recover(
+    @PostMapping(value = "/api/document/{documentId}/restore")
+    public ResponseEntity<String> restore(
             @PathVariable Long documentId,
             HttpServletRequest request
     ) {
@@ -132,7 +132,7 @@ public class DocumentController {
         if (authority < UserAuthority.CRUD) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        documentService.recover(documentId);
+        documentService.restore(documentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

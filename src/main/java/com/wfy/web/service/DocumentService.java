@@ -45,7 +45,7 @@ public class DocumentService {
         documentDao.delete(id);
     }
 
-    public void recover(Long id) {
-        documentDao.recover(id);
+    public void restore(Long id) {
+        documentDao.restore(id);
     }
 }
