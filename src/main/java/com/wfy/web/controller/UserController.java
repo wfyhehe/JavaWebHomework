@@ -1,10 +1,19 @@
 package com.wfy.web.controller;
 
+import com.wfy.web.common.Const;
+import com.wfy.web.model.Token;
 import com.wfy.web.model.User;
+import com.wfy.web.service.TokenService;
 import com.wfy.web.service.UserService;
+import com.wfy.web.utils.MD5;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,19 +25,56 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/api/user/")
-    public List<User> list() {
-        return userService.list();
+    @Autowired
+    private TokenService tokenService;
+
+    @GetMapping(value = "/api/user")
+    public ResponseEntity<List<User>> list() {
+        List<User> users = userService.list();
+        return new ResponseEntity<>(users, HttpStatus.ACCEPTED);
     }
 
-    @GetMapping(value = "/api/user/{username}/")
-    public User retrieve(@PathVariable String username) {
-        return userService.getUserByUsername(username);
+    @GetMapping(value = "/api/user/{username}")
+    public ResponseEntity<User> retrieve(@PathVariable String username) {
+        User user = userService.getUserByUsername(username);
+        return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
 
-    @PostMapping(value = "/api/user/")
-    public void create(@RequestBody User user) {
-        System.out.println(user);
+    @PostMapping(value = "/api/user/signin")
+    public ResponseEntity<String> signIn(@RequestBody User user) {
+        String username = user.getUsername();
+        User userFromDb = userService.getUserByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<>("Username doesn't exist.", HttpStatus.UNAUTHORIZED);
+        }
+        if (!MD5.getMD5(user.getPassword()).equals(userFromDb.getPassword())) {
+            return new ResponseEntity<>("Wrong password.", HttpStatus.UNAUTHORIZED);
+        }
+
+        String jwtToken = Jwts.builder().setSubject(userFromDb.getId().toString())
+                .claim("uid", userFromDb.getId()).setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, Const.JWT_SECRET_KEY).compact();
+        tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
+
+        return new ResponseEntity<>(jwtToken, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping(value = "/api/user")
+    public ResponseEntity<String> signUp(@RequestBody User user) {
+        String username = user.getUsername();
+        User userFromDb = userService.getUserByUsername(username);
+        if (userFromDb != null) {
+            return new ResponseEntity<>("Username already exist.", HttpStatus.UNAUTHORIZED);
+        }
+        user.setPassword(MD5.getMD5(user.getPassword()));
         userService.create(user);
+        userFromDb = userService.getUserByUsername(user.getUsername());
+        String jwtToken = Jwts.builder().setSubject(userFromDb.getId().toString())
+                .claim("uid", userFromDb.getId()).setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, Const.JWT_SECRET_KEY).compact();
+        tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
+        return new ResponseEntity<>(jwtToken, HttpStatus.ACCEPTED);
     }
+
+
 }
