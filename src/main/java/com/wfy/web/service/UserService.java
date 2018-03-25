@@ -25,6 +25,16 @@ public class UserService {
         return userDao.retrieveByUsername(username);
     }
 
+    public boolean isSuperAdmin(String username) {
+        User user = getUserByUsername(username);
+        return user != null && user.getAuthority() == 0;
+    }
+
+    public boolean isSuperAdmin(Long id) {
+        User user = userDao.retrieve(id);
+        return user != null && user.getAuthority() == 0;
+    }
+
     public void create(User user) {
         user.setCreateTime(new Date());
         userDao.create(user);

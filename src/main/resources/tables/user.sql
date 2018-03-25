@@ -4,7 +4,7 @@ CREATE TABLE t_user (
   password        CHAR(32)           NOT NULL,
   create_time     DATETIME,
   last_login_time DATETIME,
-  authority       TINYINT            NOT NULL # 0: superadmin 1: 增删改查 2:增查 3:只读
+  authority       TINYINT            NOT NULL # 1:只读, 2:增查, 3:增删改查, 100:superadmin
 );
 
 CREATE INDEX index_user_username

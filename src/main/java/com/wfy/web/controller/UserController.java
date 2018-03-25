@@ -9,7 +9,6 @@ import com.wfy.web.utils.MD5;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,12 +67,18 @@ public class UserController {
     }
 
     @PostMapping(value = "/api/user")
-    public ResponseEntity<String> signUp(@RequestBody User user) {
+    public ResponseEntity<String> signUp(@RequestBody User user, HttpServletRequest request) {
+        Integer authority = (Integer) request.getAttribute("authority");
+        if (authority <= Const.SUPER_ADMIN) {
+            return new ResponseEntity<>("Admin only", HttpStatus.FORBIDDEN);
+        }
+
         String username = user.getUsername();
         User userFromDb = userService.getUserByUsername(username);
         if (userFromDb != null) {
             return new ResponseEntity<>("Username already exist.", HttpStatus.UNAUTHORIZED);
         }
+
         user.setPassword(MD5.getMD5(user.getPassword()));
         userService.create(user);
         userFromDb = userService.getUserByUsername(user.getUsername());
@@ -81,8 +86,7 @@ public class UserController {
                 .claim("uid", userFromDb.getId()).setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, Const.JWT_SECRET_KEY).compact();
         tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
-        return new ResponseEntity<>(jwtToken, HttpStatus.ACCEPTED);
+
+        return new ResponseEntity<>(jwtToken, HttpStatus.CREATED);
     }
-
-
 }
