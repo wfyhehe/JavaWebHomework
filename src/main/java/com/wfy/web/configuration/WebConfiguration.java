@@ -22,6 +22,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor())
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/user/singin");
+                .excludePathPatterns("/api/user/signin");
     }
 }

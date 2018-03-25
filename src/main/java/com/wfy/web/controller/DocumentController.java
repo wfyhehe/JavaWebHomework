@@ -1,7 +1,6 @@
 package com.wfy.web.controller;
 
 import com.wfy.web.common.DocumentStatus;
-import com.wfy.web.common.GlobalConst;
 import com.wfy.web.common.UserAuthority;
 import com.wfy.web.model.Document;
 import com.wfy.web.model.User;
@@ -25,7 +24,7 @@ public class DocumentController {
     @GetMapping(value = "/api/document")
     public ResponseEntity<List<Document>> list() {
         List<Document> documents = documentService.list();
-        return new ResponseEntity<>(documents, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(documents, HttpStatus.OK);
     }
 
     @GetMapping(value = "/api/document/{documentId}")
@@ -35,7 +34,7 @@ public class DocumentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(document, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(document, HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/document")
@@ -43,7 +42,7 @@ public class DocumentController {
             @RequestBody Document document,
             HttpServletRequest request
     ) {
-        Long uid = (Long) request.getAttribute("uid");
+        Long uid = Long.valueOf((String) request.getAttribute("uid"));
         Integer authority = (Integer) request.getAttribute("authority");
         if (authority < UserAuthority.CR) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -76,7 +75,7 @@ public class DocumentController {
         }
         document.setId(documentId);
         documentService.update(document);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/document/{documentId}/approve")
@@ -92,7 +91,7 @@ public class DocumentController {
         }
         document.setStatus(DocumentStatus.APPROVED);
         documentService.update(document);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/document/{documentId}/deny")
@@ -108,7 +107,7 @@ public class DocumentController {
         }
         document.setStatus(DocumentStatus.DENIED);
         documentService.update(document);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/api/document/{documentId}")
@@ -121,6 +120,19 @@ public class DocumentController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         documentService.delete(documentId);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/api/document/{documentId}/recover")
+    public ResponseEntity<String> recover(
+            @PathVariable Long documentId,
+            HttpServletRequest request
+    ) {
+        Integer authority = (Integer) request.getAttribute("authority");
+        if (authority < UserAuthority.CRUD) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        documentService.recover(documentId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

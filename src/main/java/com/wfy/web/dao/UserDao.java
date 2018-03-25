@@ -16,6 +16,12 @@ public interface UserDao {
     @Select("SELECT * FROM t_user")
     List<User> list();
 
+    @Select("SELECT t_user.* FROM " +
+            "t_user INNER JOIN t_document_user " +
+            "ON t_user.id = t_document_user.user_id " +
+            "where t_document_user.document_id = #{documentId}")
+    List<User> listByDocument(@Param("documentId") Long documentId);
+
     @Select("SELECT * FROM t_user WHERE id = #{id}")
     User retrieve(Long id);
 

@@ -1,5 +1,8 @@
 package com.wfy.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 /**
@@ -29,6 +32,7 @@ public class User {
         this.username = username;
     }
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword() {
         return password;
     }

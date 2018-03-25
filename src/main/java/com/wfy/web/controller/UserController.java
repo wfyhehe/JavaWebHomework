@@ -33,13 +33,13 @@ public class UserController {
     @GetMapping(value = "/api/user")
     public ResponseEntity<List<User>> list() {
         List<User> users = userService.list();
-        return new ResponseEntity<>(users, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping(value = "/api/user/{username}")
     public ResponseEntity<User> retrieve(@PathVariable String username) {
         User user = userService.getUserByUsername(username);
-        return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/user/signin")
@@ -49,28 +49,32 @@ public class UserController {
         if (userFromDb == null) {
             return new ResponseEntity<>("Username doesn't exist.", HttpStatus.UNAUTHORIZED);
         }
-        if (!MD5.getMD5(user.getPassword()).equals(userFromDb.getPassword())) {
+        if (!MD5.getMD5(user.getPassword()).equalsIgnoreCase(userFromDb.getPassword())) {
             return new ResponseEntity<>("Wrong password.", HttpStatus.UNAUTHORIZED);
         }
 
-        String jwtToken = Jwts.builder().setSubject(userFromDb.getId().toString())
-                .claim("uid", userFromDb.getId()).setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, GlobalConst.JWT_SECRET_KEY).compact();
+        String jwtToken = Jwts.builder()
+                .setSubject(userFromDb.getId().toString())
+                .claim("uid", userFromDb.getId())
+                .claim("authority", userFromDb.getAuthority())
+                .setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, GlobalConst.JWT_SECRET_KEY)
+                .compact();
         tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
-        return new ResponseEntity<>(jwtToken, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/user/signout")
     public ResponseEntity<String> signOut(HttpServletRequest request) {
         String uid = (String) request.getAttribute("uid");
         tokenService.delete(uid);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/user")
     public ResponseEntity<String> signUp(@RequestBody User user, HttpServletRequest request) {
         Integer authority = (Integer) request.getAttribute("authority");
-        if (authority <= UserAuthority.SUPER_ADMIN) {
+        if (authority < UserAuthority.SUPER_ADMIN) {
             return new ResponseEntity<>("Admin only", HttpStatus.FORBIDDEN);
         }
 
@@ -83,9 +87,13 @@ public class UserController {
         user.setPassword(MD5.getMD5(user.getPassword()));
         userService.create(user);
         userFromDb = userService.getUserByUsername(user.getUsername());
-        String jwtToken = Jwts.builder().setSubject(userFromDb.getId().toString())
-                .claim("uid", userFromDb.getId()).setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, GlobalConst.JWT_SECRET_KEY).compact();
+        String jwtToken = Jwts.builder().
+                setSubject(userFromDb.getId().toString())
+                .claim("uid", userFromDb.getId())
+                .claim("authority", userFromDb.getAuthority())
+                .setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, GlobalConst.JWT_SECRET_KEY)
+                .compact();
         tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
 
         return new ResponseEntity<>(jwtToken, HttpStatus.CREATED);

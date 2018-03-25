@@ -1,5 +1,6 @@
 package com.wfy.web.service;
 
+import com.wfy.web.common.DocumentStatus;
 import com.wfy.web.dao.DocumentDao;
 import com.wfy.web.model.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,9 @@ public class DocumentService {
 
     public void create(Document document, Long userId) {
         document.setCreateTime(new Date());
-        Long id = documentDao.create(document);
-        documentDao.createLink(id, userId);
-
+        document.setStatus(DocumentStatus.PENDING);
+        documentDao.create(document);
+        documentDao.createLink(document.getId(), userId);
     }
 
     public void update(Document document) {
@@ -44,5 +45,7 @@ public class DocumentService {
         documentDao.delete(id);
     }
 
-
+    public void recover(Long id) {
+        documentDao.recover(id);
+    }
 }
