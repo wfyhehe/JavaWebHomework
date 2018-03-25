@@ -1,6 +1,7 @@
 package com.wfy.web.controller;
 
-import com.wfy.web.common.Const;
+import com.wfy.web.common.GlobalConst;
+import com.wfy.web.common.UserAuthority;
 import com.wfy.web.model.Token;
 import com.wfy.web.model.User;
 import com.wfy.web.service.TokenService;
@@ -54,7 +55,7 @@ public class UserController {
 
         String jwtToken = Jwts.builder().setSubject(userFromDb.getId().toString())
                 .claim("uid", userFromDb.getId()).setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, Const.JWT_SECRET_KEY).compact();
+                .signWith(SignatureAlgorithm.HS256, GlobalConst.JWT_SECRET_KEY).compact();
         tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
         return new ResponseEntity<>(jwtToken, HttpStatus.ACCEPTED);
     }
@@ -69,7 +70,7 @@ public class UserController {
     @PostMapping(value = "/api/user")
     public ResponseEntity<String> signUp(@RequestBody User user, HttpServletRequest request) {
         Integer authority = (Integer) request.getAttribute("authority");
-        if (authority <= Const.SUPER_ADMIN) {
+        if (authority <= UserAuthority.SUPER_ADMIN) {
             return new ResponseEntity<>("Admin only", HttpStatus.FORBIDDEN);
         }
 
@@ -84,7 +85,7 @@ public class UserController {
         userFromDb = userService.getUserByUsername(user.getUsername());
         String jwtToken = Jwts.builder().setSubject(userFromDb.getId().toString())
                 .claim("uid", userFromDb.getId()).setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, Const.JWT_SECRET_KEY).compact();
+                .signWith(SignatureAlgorithm.HS256, GlobalConst.JWT_SECRET_KEY).compact();
         tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
 
         return new ResponseEntity<>(jwtToken, HttpStatus.CREATED);

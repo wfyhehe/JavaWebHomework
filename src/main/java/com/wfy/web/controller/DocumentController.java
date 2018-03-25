@@ -1,6 +1,8 @@
 package com.wfy.web.controller;
 
-import com.wfy.web.common.Const;
+import com.wfy.web.common.DocumentStatus;
+import com.wfy.web.common.GlobalConst;
+import com.wfy.web.common.UserAuthority;
 import com.wfy.web.model.Document;
 import com.wfy.web.model.User;
 import com.wfy.web.service.DocumentService;
@@ -43,7 +45,7 @@ public class DocumentController {
     ) {
         Long uid = (Long) request.getAttribute("uid");
         Integer authority = (Integer) request.getAttribute("authority");
-        if (authority < Const.CR) {
+        if (authority < UserAuthority.CR) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         documentService.create(document, uid);
@@ -60,7 +62,7 @@ public class DocumentController {
         Document oldDocument = documentService.retrieve(documentId);
         Integer authority = (Integer) request.getAttribute("authority");
         boolean isContributor = false;
-        if (authority == Const.CR) {
+        if (authority == UserAuthority.CR) {
             for (User contributor : oldDocument.getContributors()) {
                 if (contributor.getId().equals(uid)) {
                     isContributor = true;
@@ -69,7 +71,7 @@ public class DocumentController {
             }
         }
 
-        if (authority < Const.CRUD && !isContributor) {
+        if (authority < UserAuthority.CRUD && !isContributor) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         document.setId(documentId);
@@ -85,10 +87,10 @@ public class DocumentController {
         Document document = documentService.retrieve(documentId);
         Integer authority = (Integer) request.getAttribute("authority");
 
-        if (authority < Const.CRUD) {
+        if (authority < UserAuthority.CRUD) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        document.setStatus(Const.APPROVED);
+        document.setStatus(DocumentStatus.APPROVED);
         documentService.update(document);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
@@ -101,10 +103,10 @@ public class DocumentController {
         Document document = documentService.retrieve(documentId);
         Integer authority = (Integer) request.getAttribute("authority");
 
-        if (authority < Const.CRUD) {
+        if (authority < UserAuthority.CRUD) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        document.setStatus(Const.DENIED);
+        document.setStatus(DocumentStatus.DENIED);
         documentService.update(document);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
@@ -115,7 +117,7 @@ public class DocumentController {
             HttpServletRequest request
     ) {
         Integer authority = (Integer) request.getAttribute("authority");
-        if (authority < Const.CRUD) {
+        if (authority < UserAuthority.CRUD) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         documentService.delete(documentId);

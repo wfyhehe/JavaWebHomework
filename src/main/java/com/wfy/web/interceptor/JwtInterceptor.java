@@ -1,6 +1,6 @@
 package com.wfy.web.interceptor;
 
-import com.wfy.web.common.Const;
+import com.wfy.web.common.GlobalConst;
 import com.wfy.web.model.Token;
 import com.wfy.web.service.TokenService;
 import io.jsonwebtoken.Claims;
@@ -27,7 +27,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
 
         Claims claims;
         try {
-            claims = Jwts.parser().setSigningKey(Const.JWT_SECRET_KEY)
+            claims = Jwts.parser().setSigningKey(GlobalConst.JWT_SECRET_KEY)
                     .parseClaimsJws(jwtToken).getBody();
         } catch (Exception e) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
