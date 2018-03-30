@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>文档管理系统</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">文档管理系统</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">文档 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/login.html">登陆 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout.html">登出 <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 ">
+    <form>
+        <div class="form-group">
+            <label for="document-username">用户名</label>
+            <input type="text" class="form-control" id="document-username">
+        </div>
+        <div class="form-group">
+            <label for="document-pw">密码</label>
+            <input type="password" class="form-control" id="document-pw">
+        </div>
+        <button id="login-submit" type="submit" class="btn btn-primary">登录</button>
+    </form>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script>
+    $("#login-submit").click(function (e) {
+        e.preventDefault();
+        $.ajax(
+            {
+                type: 'POST',
+                url: '/api/user/signin',
+                data: JSON.stringify({
+                    "username": $('#document-username').val(),
+                    "password": $('#document-pw').val(),
+                }),
+                success: function (data) {
+                    Cookies.set('jwt_token', data.message);
+                    window.location.href = '/';
+                },
+                contentType: "application/json",
+                dataType: "json"
+            }
+        );
+    });
+</script>
+</body>
+</html>

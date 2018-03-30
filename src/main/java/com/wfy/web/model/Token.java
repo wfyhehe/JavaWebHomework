@@ -16,6 +16,11 @@ public class Token implements Serializable {
         this.credentials = credentials;
     }
 
+    public Token(Object userId, Object credentials) {
+        this.id = (String) userId;
+        this.credentials = (String) credentials;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

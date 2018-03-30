@@ -1,13 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>文档管理系统</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.js"></script>
-<script src="js/index.js"></script>
-<p>Hello</p>
-<img src="img/kefu.jpg" />
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">文档管理系统</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">文档 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login.html">登陆 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout.html">登出 <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div id="not-logged-in" class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5" style="margin-top: 20px; display: none;">
+    <p>抱歉，您还未登陆，请先登录！</p>
+    <a href="/login.html"><button class="btn btn-primary">去登录</button></a>
+</div>
+<div id="doc-list" class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5" style="margin-top: 20px; display: none;">
+    <script id="template" type="x-tmpl-mustache">
+        {{#docs}}
+        <b>{{name}}</b>
+        {{/docs}}
+    </script>
+    <div id="template-target">
+
+    </div>
+</div>
+
+
+<script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/mustache.js/2.3.0/mustache.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script>
+    if(Cookies.get('jwt_token')) {
+        $('#doc-list').show();
+        var template = $('#template').html();
+        Mustache.parse(template);   // optional, speeds up future uses
+        var rendered = Mustache.render(template, {name: "Luke"});
+        $('#template-target').html(rendered);
+    } else {
+        $('#not-logged-in').show();
+    }
+</script>
 </body>
 </html>
