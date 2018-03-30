@@ -72,11 +72,11 @@ public class DocumentController {
         }
 
         if (authority < UserAuthority.CRUD && !isContributor) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ResponseMessage(), HttpStatus.FORBIDDEN);
         }
         document.setId(documentId);
         documentService.update(document);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/document/{documentId}/approve")
@@ -88,11 +88,11 @@ public class DocumentController {
         Integer authority = (Integer) request.getAttribute("authority");
 
         if (authority < UserAuthority.CRUD) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ResponseMessage(), HttpStatus.FORBIDDEN);
         }
         document.setStatus(DocumentStatus.APPROVED);
         documentService.update(document);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/document/{documentId}/deny")
@@ -104,11 +104,11 @@ public class DocumentController {
         Integer authority = (Integer) request.getAttribute("authority");
 
         if (authority < UserAuthority.CRUD) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ResponseMessage(), HttpStatus.FORBIDDEN);
         }
         document.setStatus(DocumentStatus.DENIED);
         documentService.update(document);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage(), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/api/document/{documentId}")
@@ -118,10 +118,10 @@ public class DocumentController {
     ) {
         Integer authority = (Integer) request.getAttribute("authority");
         if (authority < UserAuthority.CRUD) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ResponseMessage(), HttpStatus.FORBIDDEN);
         }
         documentService.delete(documentId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/document/{documentId}/restore")
@@ -131,9 +131,9 @@ public class DocumentController {
     ) {
         Integer authority = (Integer) request.getAttribute("authority");
         if (authority < UserAuthority.CRUD) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ResponseMessage(), HttpStatus.FORBIDDEN);
         }
         documentService.restore(documentId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage(), HttpStatus.OK);
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class UserController {
     public ResponseEntity<List<User>> list(HttpServletRequest request) {
         Integer authority = (Integer) request.getAttribute("authority");
         if (authority < UserAuthority.SUPER_ADMIN) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.FORBIDDEN);
         }
         List<User> users = userService.list();
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -48,7 +49,7 @@ public class UserController {
     ) {
         Integer authority = (Integer) request.getAttribute("authority");
         if (authority < UserAuthority.SUPER_ADMIN) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new User(), HttpStatus.FORBIDDEN);
         }
         User user = userService.getUserByUsername(username);
         return new ResponseEntity<>(user, HttpStatus.OK);
