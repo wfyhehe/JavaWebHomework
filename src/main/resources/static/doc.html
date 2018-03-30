@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>文档管理系统</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">文档管理系统</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -28,24 +30,29 @@
 </nav>
 <div id="not-logged-in" class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5" style="margin-top: 20px; display: none;">
     <p>抱歉，您还未登陆，请先登录！</p>
-    <a href="/login.html"><button class="btn btn-primary">去登录</button></a>
+    <a href="/login.html">
+        <button class="btn btn-primary">去登录</button>
+    </a>
 </div>
-<div id="doc-list" class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5" style="margin-top: 20px; display: none;">
+<div id="doc-detail" class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5" style="margin-top: 20px; display: none;">
     <script id="template" type="x-tmpl-mustache">
-        {{#docs}}
-        <li class="list-group-item">
-            <a href="/doc.html?id={{id}}">
-                <span>{{id}} </span>
-                <strong>{{title}}</strong>
-            </a>
+            <span>{{id}} </span>
+            <strong>{{title}}</strong>
+            <button class="btn btn-primary" style="float: right;">修改</button>
             <p>{{createTime}}</p>
             <span>{{status}}</span>
-        </li>
-        {{/docs}}
+            <p> 作者:
+            {{#contributors}}
+              {{username}}&nbsp;
+            {{/contributors}}
+            </p>
+            <div style="background: rgb(245, 245, 245); padding: 5px;">
+                <p>{{content}}</p>
+            </div>
+
     </script>
-    <div>
-        <ul id="template-target" class="list-group">
-        </ul>
+    <div id="template-target">
+
     </div>
 </div>
 
@@ -53,34 +60,41 @@
 <script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.js"
         crossorigin="anonymous"></script>
 <script src="https://cdn.bootcss.com/mustache.js/2.3.0/mustache.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script src="https://cdn.bootcss.com/moment.js/2.21.0/moment.js"></script>
 <script src="https://cdn.bootcss.com/moment.js/2.21.0/locale/zh-cn.js"></script>
 <script>
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
     var DOC_STATUS = [
         '等待审核', '审核通过', '已被驳回'
     ]
-    if(Cookies.get('jwt_token')) {
-        $('#doc-list').show();
+    if (Cookies.get('jwt_token')) {
+        $('#doc-detail').show();
         var template = $('#template').html();
         Mustache.parse(template);
         $.ajax(
             {
                 type: 'GET',
-                url: '/api/document/',
+                url: '/api/document/' + getUrlParam('id'),
                 headers: {
                     'Authorization': Cookies.get('jwt_token')
                 },
                 success: function (data) {
-                    var docs = [];
-                    for(var i in data) {
-                        data[i].createTime = moment(data[i].createTime).format('lll');
-                        data[i].status = DOC_STATUS[data[i].status];
-                        docs.push(data[i]);
-                    }
-                    var rendered = Mustache.render(template, {docs: docs});
+                    data.createTime = moment(data.createTime).format('lll');
+                    data.status = DOC_STATUS[data.status];
+                    var rendered = Mustache.render(template, data);
                     $('#template-target').html(rendered);
                 },
                 contentType: "application/json",
