@@ -1,6 +1,7 @@
 package com.wfy.web.controller;
 
 import com.wfy.web.common.DocumentStatus;
+import com.wfy.web.common.ResponseMessage;
 import com.wfy.web.common.UserAuthority;
 import com.wfy.web.model.Document;
 import com.wfy.web.model.User;
@@ -38,7 +39,7 @@ public class DocumentController {
     }
 
     @PostMapping(value = "/api/document")
-    public ResponseEntity<String> create(
+    public ResponseEntity<ResponseMessage> create(
             @RequestBody Document document,
             HttpServletRequest request
     ) {
@@ -52,7 +53,7 @@ public class DocumentController {
     }
 
     @PutMapping(value = "/api/document/{documentId}")
-    public ResponseEntity<String> update(
+    public ResponseEntity<ResponseMessage> update(
             @RequestBody Document document,
             @PathVariable Long documentId,
             HttpServletRequest request
@@ -79,7 +80,7 @@ public class DocumentController {
     }
 
     @PostMapping(value = "/api/document/{documentId}/approve")
-    public ResponseEntity<String> approve(
+    public ResponseEntity<ResponseMessage> approve(
             @PathVariable Long documentId,
             HttpServletRequest request
     ) {
@@ -95,7 +96,7 @@ public class DocumentController {
     }
 
     @PostMapping(value = "/api/document/{documentId}/deny")
-    public ResponseEntity<String> deny(
+    public ResponseEntity<ResponseMessage> deny(
             @PathVariable Long documentId,
             HttpServletRequest request
     ) {
@@ -111,7 +112,7 @@ public class DocumentController {
     }
 
     @DeleteMapping(value = "/api/document/{documentId}")
-    public ResponseEntity<String> delete(
+    public ResponseEntity<ResponseMessage> delete(
             @PathVariable Long documentId,
             HttpServletRequest request
     ) {
@@ -124,7 +125,7 @@ public class DocumentController {
     }
 
     @PostMapping(value = "/api/document/{documentId}/restore")
-    public ResponseEntity<String> restore(
+    public ResponseEntity<ResponseMessage> restore(
             @PathVariable Long documentId,
             HttpServletRequest request
     ) {
