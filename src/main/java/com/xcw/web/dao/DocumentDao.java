@@ -1,13 +1,13 @@
-package com.wfy.web.dao;
+package com.xcw.web.dao;
 
-import com.wfy.web.model.Document;
+import com.xcw.web.model.Document;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * Created by wfy on 18-3-25, good luck.
+ * Created by xcw on 18-3-25, good luck.
  */
 @Repository
 @Mapper
@@ -24,7 +24,7 @@ public interface DocumentDao {
             @Result(property = "createTime", column = "create_time"),
             @Result(property = "status", column = "status"),
             @Result(property = "contributors", column = "document_id",
-                    many = @Many(select = "com.wfy.web.dao.UserDao.listByDocument")
+                    many = @Many(select = "com.xcw.web.dao.UserDao.listByDocument")
             )
     })
     List<Document> list();
@@ -41,7 +41,7 @@ public interface DocumentDao {
             @Result(property = "createTime", column = "create_time"),
             @Result(property = "status", column = "status"),
             @Result(property = "contributors", column = "document_id",
-                    many = @Many(select = "com.wfy.web.dao.UserDao.listByDocument")
+                    many = @Many(select = "com.xcw.web.dao.UserDao.listByDocument")
             )
     })
     List<Document> listByUser(Long id);
@@ -58,7 +58,7 @@ public interface DocumentDao {
             @Result(property = "createTime", column = "create_time"),
             @Result(property = "status", column = "status"),
             @Result(property = "contributors", column = "document_id",
-                    many = @Many(select = "com.wfy.web.dao.UserDao.listByDocument")
+                    many = @Many(select = "com.xcw.web.dao.UserDao.listByDocument")
             )
     })
     Document retrieve(Long id);

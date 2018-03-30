@@ -1,10 +1,10 @@
-package com.wfy.web.model;
+package com.xcw.web.model;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Created by wfy on 18-3-25, good luck.
+ * Created by xcw on 18-3-25, good luck.
  */
 
 public class Token implements Serializable {

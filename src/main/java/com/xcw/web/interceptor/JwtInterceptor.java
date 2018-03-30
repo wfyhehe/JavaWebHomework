@@ -1,8 +1,8 @@
-package com.wfy.web.interceptor;
+package com.xcw.web.interceptor;
 
-import com.wfy.web.common.GlobalConst;
-import com.wfy.web.model.Token;
-import com.wfy.web.service.TokenService;
+import com.xcw.web.common.GlobalConst;
+import com.xcw.web.model.Token;
+import com.xcw.web.service.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.wfy.web.common;
+package com.xcw.web.common;
 
 public class UserAuthority {
     public static final int READ_ONLY = 1;

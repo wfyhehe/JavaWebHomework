@@ -1,4 +1,4 @@
-package com.wfy.web.model;
+package com.xcw.web.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
 /**
- * Created by wfy on 18-3-24, good luck.
+ * Created by xcw on 18-3-24, good luck.
  */
 public class User {
     private Long id;

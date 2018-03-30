@@ -1,7 +1,7 @@
-package com.wfy.web.service;
+package com.xcw.web.service;
 
-import com.wfy.web.dao.UserDao;
-import com.wfy.web.model.User;
+import com.xcw.web.dao.UserDao;
+import com.xcw.web.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by wfy on 18-3-24, good luck.
+ * Created by xcw on 18-3-24, good luck.
  */
 @Service
 public class UserService {

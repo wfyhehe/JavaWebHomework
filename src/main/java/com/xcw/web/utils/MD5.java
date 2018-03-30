@@ -1,4 +1,4 @@
-package com.wfy.web.utils;
+package com.xcw.web.utils;
 
 import java.security.MessageDigest;
 

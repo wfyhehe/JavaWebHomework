@@ -1,9 +1,9 @@
-package com.wfy.web.common;
+package com.xcw.web.common;
 
-import com.wfy.web.model.User;
+import com.xcw.web.model.User;
 
 /**
- * Created by wfy on 18-3-30, good luck.
+ * Created by xcw on 18-3-30, good luck.
  */
 public class SignInResponse {
     private String jwtToken;

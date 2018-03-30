@@ -1,7 +1,7 @@
-package com.wfy.web.common;
+package com.xcw.web.common;
 
 /**
- * Created by wfy on 18-3-30, good luck.
+ * Created by xcw on 18-3-30, good luck.
  */
 public class ResponseMessage {
     String message;

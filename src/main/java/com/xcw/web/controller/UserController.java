@@ -1,14 +1,14 @@
-package com.wfy.web.controller;
+package com.xcw.web.controller;
 
-import com.wfy.web.common.GlobalConst;
-import com.wfy.web.common.ResponseMessage;
-import com.wfy.web.common.SignInResponse;
-import com.wfy.web.common.UserAuthority;
-import com.wfy.web.model.Token;
-import com.wfy.web.model.User;
-import com.wfy.web.service.TokenService;
-import com.wfy.web.service.UserService;
-import com.wfy.web.utils.MD5;
+import com.xcw.web.common.GlobalConst;
+import com.xcw.web.common.ResponseMessage;
+import com.xcw.web.common.SignInResponse;
+import com.xcw.web.common.UserAuthority;
+import com.xcw.web.model.Token;
+import com.xcw.web.model.User;
+import com.xcw.web.service.TokenService;
+import com.xcw.web.service.UserService;
+import com.xcw.web.utils.MD5;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by wfy on 18-3-24, good luck.
+ * Created by xcw on 18-3-24, good luck.
  */
 @RestController
 public class UserController {

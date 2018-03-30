@@ -1,8 +1,8 @@
-package com.wfy.web.service;
+package com.xcw.web.service;
 
-import com.wfy.web.common.DocumentStatus;
-import com.wfy.web.dao.DocumentDao;
-import com.wfy.web.model.Document;
+import com.xcw.web.common.DocumentStatus;
+import com.xcw.web.dao.DocumentDao;
+import com.xcw.web.model.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by wfy on 18-3-24, good luck.
+ * Created by xcw on 18-3-24, good luck.
  */
 @Service
 public class DocumentService {

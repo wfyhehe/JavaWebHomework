@@ -1,12 +1,12 @@
-package com.wfy.web.dao;
+package com.xcw.web.dao;
 
-import com.wfy.web.model.Token;
+import com.xcw.web.model.Token;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 
 /**
- * Created by wfy on 18-3-25, good luck.
+ * Created by xcw on 18-3-25, good luck.
  */
 @Repository
 @Mapper

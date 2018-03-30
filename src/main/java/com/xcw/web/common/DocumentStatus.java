@@ -1,4 +1,4 @@
-package com.wfy.web.common;
+package com.xcw.web.common;
 
 public class DocumentStatus {
     public static final int PENDING = 0;

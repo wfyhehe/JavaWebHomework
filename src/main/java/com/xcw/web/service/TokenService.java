@@ -1,12 +1,12 @@
-package com.wfy.web.service;
+package com.xcw.web.service;
 
-import com.wfy.web.dao.TokenDao;
-import com.wfy.web.model.Token;
+import com.xcw.web.dao.TokenDao;
+import com.xcw.web.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by wfy on 18-3-24, good luck.
+ * Created by xcw on 18-3-24, good luck.
  */
 @Service
 public class TokenService {

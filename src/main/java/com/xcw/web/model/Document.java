@@ -1,10 +1,10 @@
-package com.wfy.web.model;
+package com.xcw.web.model;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by wfy on 18-3-24, good luck.
+ * Created by xcw on 18-3-24, good luck.
  */
 public class Document {
     private Long id;

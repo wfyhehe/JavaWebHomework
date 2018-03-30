@@ -1,11 +1,11 @@
-package com.wfy.web.controller;
+package com.xcw.web.controller;
 
-import com.wfy.web.common.DocumentStatus;
-import com.wfy.web.common.ResponseMessage;
-import com.wfy.web.common.UserAuthority;
-import com.wfy.web.model.Document;
-import com.wfy.web.model.User;
-import com.wfy.web.service.DocumentService;
+import com.xcw.web.common.DocumentStatus;
+import com.xcw.web.common.ResponseMessage;
+import com.xcw.web.common.UserAuthority;
+import com.xcw.web.model.Document;
+import com.xcw.web.model.User;
+import com.xcw.web.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Created by wfy on 18-3-24, good luck.
+ * Created by xcw on 18-3-24, good luck.
  */
 @RestController
 public class DocumentController {
