@@ -41,32 +41,26 @@
 </div>
 <div id="doc-detail" class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5" style="margin-top: 20px; display: none;">
     <script id="template" type="x-tmpl-mustache">
-            <span>{{id}} </span>
-            <strong>{{title}}</strong>
-            {{#canEdit}}
-            <button onclick="del();" class="btn btn-danger" style="float: right;">删除</button>
-            <a href="/edit.html?id={{id}}">
-                <button class="btn btn-primary" style="float: right;">修改</button>
-            </a>
-            {{/canEdit}}
-            <p>{{createTime}}</p>
-            <span>{{status}}</span>
-            {{#canEdit}}
-            <button onclick="reject();" class="btn btn-secondary" style="float: right;">驳回</button>
-            <button onclick="approve();" class="btn btn-success" style="float: right;">通过</button>
-            {{/canEdit}}
-            <p> 作者:
-            {{#contributors}}
-              {{username}}&nbsp;
-            {{/contributors}}
-            </p>
-            <div style="background: rgb(245, 245, 245); padding: 5px;">
-                <p>{{content}}</p>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">标题</span>
+                </div>
+                <input id="form-title" type="text" value="{{title}}" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
             </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">内容</span>
+                </div>
+                <textarea id="form-content" class="form-control" aria-label="内容">{{content}}</textarea>
+            </div>
+
 
     </script>
     <div id="template-target">
 
+    </div>
+    <div>
+        <button onclick="submit()" class="btn btn-primary">提交</button>
     </div>
 </div>
 
@@ -91,83 +85,77 @@
         return null;
     }
 
-    var DOC_STATUS = [
-        '等待审核', '审核通过', '已被驳回'
-    ];
-
-    function approve() {
-        $.ajax(
-            {
-                type: 'POST',
-                url: '/api/document/' + getUrlParam('id') + '/approve/',
-                headers: {
-                    'Authorization': Cookies.get('jwt_token')
-                },
-                success: function () {
-                    //location.reload();
-                },
-                contentType: "application/json",
-                dataType: "json"
-            }
-        );
-    };
-
-    function reject() {
-        $.ajax(
-            {
-                type: 'POST',
-                url: '/api/document/' + getUrlParam('id') + '/deny/',
-                headers: {
-                    'Authorization': Cookies.get('jwt_token')
-                },
-                success: function () {
-                    //location.reload();
-                },
-                contentType: "application/json",
-                dataType: "json"
-            }
-        );
-    };
-
-    function del() {
-        $.ajax(
-            {
-                type: 'DELETE',
-                url: '/api/document/' + getUrlParam('id'),
-                headers: {
-                    'Authorization': Cookies.get('jwt_token')
-                },
-                success: function () {
-                    window.location.href = '/';
-                },
-                contentType: "application/json",
-                dataType: "json"
-            }
-        );
-    };
+    function submit() {
+        if (getUrlParam('id')) {
+            $.ajax(
+                {
+                    type: 'PUT',
+                    url: '/api/document/' + getUrlParam('id'),
+                    headers: {
+                        'Authorization': Cookies.get('jwt_token')
+                    },
+                    data: JSON.stringify({
+                        title: $('#form-title').val(),
+                        content: $('#form-content').val()
+                    }),
+                    success: function (data) {
+                        window.location = '/doc.html?id=' + getUrlParam('id');
+                    },
+                    contentType: "application/json",
+                    dataType: "json"
+                }
+            );
+        } else {
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: '/api/document/',
+                    headers: {
+                        'Authorization': Cookies.get('jwt_token')
+                    },
+                    data: JSON.stringify({
+                        title: $('#form-title').val(),
+                        content: $('#form-content').val()
+                    }),
+                    success: function (data) {
+                        window.location = '/';
+                    },
+                    contentType: "application/json",
+                    dataType: "json"
+                }
+            );
+        }
+    }
 
     if (Cookies.get('jwt_token')) {
         $('#doc-detail').show();
         var template = $('#template').html();
         Mustache.parse(template);
-        $.ajax(
-            {
-                type: 'GET',
-                url: '/api/document/' + getUrlParam('id'),
-                headers: {
-                    'Authorization': Cookies.get('jwt_token')
-                },
-                success: function (data) {
-                    data.createTime = moment(data.createTime).format('lll');
-                    data.status = DOC_STATUS[data.status];
-                    data.canEdit = Cookies.get('user_authority') >= 3;
-                    var rendered = Mustache.render(template, data);
-                    $('#template-target').html(rendered);
-                },
-                contentType: "application/json",
-                dataType: "json"
-            }
-        );
+        if (getUrlParam('id')) {
+            $.ajax(
+                {
+                    type: 'GET',
+                    url: '/api/document/' + getUrlParam('id'),
+                    headers: {
+                        'Authorization': Cookies.get('jwt_token')
+                    },
+                    success: function (data) {
+                        var rendered = Mustache.render(template, data);
+                        $('#template-target').html(rendered);
+                    },
+                    contentType: "application/json",
+                    dataType: "json"
+                }
+            );
+        } else {
+            var data = {
+                title: '',
+                content: ''
+            };
+            var rendered = Mustache.render(template, data);
+            $('#template-target').html(rendered);
+        }
+
     } else {
         $('#not-logged-in').show();
     }

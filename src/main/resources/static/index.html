@@ -32,6 +32,11 @@
 </div>
 <div id="doc-list" class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5" style="margin-top: 20px; display: none;">
     <script id="template" type="x-tmpl-mustache">
+        {{#canAdd}}
+            <a href="/edit.html">
+                <button class="btn btn-primary" style="float: right; margin-bottom: 10px;">增加</button>
+            </a>
+        {{/canAdd}}
         {{#docs}}
         <li class="list-group-item">
             <a href="/doc.html?id={{id}}">
@@ -80,7 +85,10 @@
                         data[i].status = DOC_STATUS[data[i].status];
                         docs.push(data[i]);
                     }
-                    var rendered = Mustache.render(template, {docs: docs});
+                    var rendered = Mustache.render(template, {
+                        canAdd: Cookies.get('user_authority') >= 1,
+                        docs: docs
+                    });
                     $('#template-target').html(rendered);
                 },
                 contentType: "application/json",

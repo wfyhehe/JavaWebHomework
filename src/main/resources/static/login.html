@@ -65,7 +65,8 @@
                     "password": $('#document-pw').val(),
                 }),
                 success: function (data) {
-                    Cookies.set('jwt_token', data.message);
+                    Cookies.set('jwt_token', data.jwtToken);
+                    Cookies.set('user_authority', data.user.authority);
                     window.location.href = '/';
                 },
                 contentType: "application/json",
