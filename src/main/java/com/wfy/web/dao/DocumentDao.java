@@ -93,6 +93,12 @@ public interface DocumentDao {
     void update(Document document);
 
     @Update("UPDATE t_document SET " +
+            "status=#{status} " +
+            "WHERE id =#{id}"
+    )
+    void updateStatus(Document document);
+
+    @Update("UPDATE t_document SET " +
             "deleted=true " +
             "WHERE id =#{id}"
     )

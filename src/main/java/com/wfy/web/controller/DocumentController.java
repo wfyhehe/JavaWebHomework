@@ -91,7 +91,7 @@ public class DocumentController {
             return new ResponseEntity<>(new ResponseMessage(), HttpStatus.FORBIDDEN);
         }
         document.setStatus(DocumentStatus.APPROVED);
-        documentService.update(document);
+        documentService.updateStatus(document);
         return new ResponseEntity<>(new ResponseMessage(), HttpStatus.OK);
     }
 
@@ -107,7 +107,7 @@ public class DocumentController {
             return new ResponseEntity<>(new ResponseMessage(), HttpStatus.FORBIDDEN);
         }
         document.setStatus(DocumentStatus.DENIED);
-        documentService.update(document);
+        documentService.updateStatus(document);
         return new ResponseEntity<>(new ResponseMessage(), HttpStatus.OK);
     }
 

@@ -41,6 +41,10 @@ public class DocumentService {
         documentDao.update(document);
     }
 
+    public void updateStatus(Document document) {
+        documentDao.updateStatus(document);
+    }
+
     public void delete(Long id) {
         documentDao.delete(id);
     }
