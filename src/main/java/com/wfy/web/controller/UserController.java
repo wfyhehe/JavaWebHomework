@@ -1,6 +1,7 @@
 package com.wfy.web.controller;
 
 import com.wfy.web.common.GlobalConst;
+import com.wfy.web.common.ResponseMessage;
 import com.wfy.web.common.UserAuthority;
 import com.wfy.web.model.Token;
 import com.wfy.web.model.User;
@@ -54,14 +55,16 @@ public class UserController {
     }
 
     @PostMapping(value = "/api/user/signin")
-    public ResponseEntity<String> signIn(@RequestBody User user) {
+    public ResponseEntity<ResponseMessage> signIn(@RequestBody User user) {
         String username = user.getUsername();
         User userFromDb = userService.getUserByUsername(username);
         if (userFromDb == null) {
-            return new ResponseEntity<>("Username doesn't exist.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ResponseMessage("Username doesn't exist."), HttpStatus
+                    .UNAUTHORIZED);
         }
         if (!MD5.getMD5(user.getPassword()).equalsIgnoreCase(userFromDb.getPassword())) {
-            return new ResponseEntity<>("Wrong password.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ResponseMessage("Wrong password."), HttpStatus
+                    .UNAUTHORIZED);
         }
 
         String jwtToken = Jwts.builder()
@@ -72,27 +75,28 @@ public class UserController {
                 .signWith(SignatureAlgorithm.HS256, GlobalConst.JWT_SECRET_KEY)
                 .compact();
         tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
-        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage(jwtToken), HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/user/signout")
-    public ResponseEntity<String> signOut(HttpServletRequest request) {
+    public ResponseEntity<ResponseMessage> signOut(HttpServletRequest request) {
         String uid = (String) request.getAttribute("uid");
         tokenService.delete(uid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/user")
-    public ResponseEntity<String> signUp(@RequestBody User user, HttpServletRequest request) {
+    public ResponseEntity<ResponseMessage> signUp(@RequestBody User user, HttpServletRequest request) {
         Integer authority = (Integer) request.getAttribute("authority");
         if (authority < UserAuthority.SUPER_ADMIN) {
-            return new ResponseEntity<>("Admin only", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ResponseMessage("Admin only"), HttpStatus.FORBIDDEN);
         }
 
         String username = user.getUsername();
         User userFromDb = userService.getUserByUsername(username);
         if (userFromDb != null) {
-            return new ResponseEntity<>("Username already exist.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ResponseMessage("Username already exist."), HttpStatus
+                    .UNAUTHORIZED);
         }
 
         user.setPassword(MD5.getMD5(user.getPassword()));
@@ -107,6 +111,6 @@ public class UserController {
                 .compact();
         tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
 
-        return new ResponseEntity<>(jwtToken, HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseMessage(jwtToken), HttpStatus.CREATED);
     }
 }
