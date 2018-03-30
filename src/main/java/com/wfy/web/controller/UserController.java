@@ -2,6 +2,7 @@ package com.wfy.web.controller;
 
 import com.wfy.web.common.GlobalConst;
 import com.wfy.web.common.ResponseMessage;
+import com.wfy.web.common.SignInResponse;
 import com.wfy.web.common.UserAuthority;
 import com.wfy.web.model.Token;
 import com.wfy.web.model.User;
@@ -57,15 +58,15 @@ public class UserController {
     }
 
     @PostMapping(value = "/api/user/signin")
-    public ResponseEntity<ResponseMessage> signIn(@RequestBody User user) {
+    public ResponseEntity<SignInResponse> signIn(@RequestBody User user) {
         String username = user.getUsername();
         User userFromDb = userService.getUserByUsername(username);
         if (userFromDb == null) {
-            return new ResponseEntity<>(new ResponseMessage("Username doesn't exist."), HttpStatus
+            return new ResponseEntity<>(new SignInResponse("Username doesn't exist."), HttpStatus
                     .UNAUTHORIZED);
         }
         if (!MD5.getMD5(user.getPassword()).equalsIgnoreCase(userFromDb.getPassword())) {
-            return new ResponseEntity<>(new ResponseMessage("Wrong password."), HttpStatus
+            return new ResponseEntity<>(new SignInResponse("Wrong password."), HttpStatus
                     .UNAUTHORIZED);
         }
 
@@ -77,7 +78,7 @@ public class UserController {
                 .signWith(SignatureAlgorithm.HS256, GlobalConst.JWT_SECRET_KEY)
                 .compact();
         tokenService.createOrUpdate(new Token(userFromDb.getId().toString(), jwtToken));
-        return new ResponseEntity<>(new ResponseMessage(jwtToken), HttpStatus.OK);
+        return new ResponseEntity<>(new SignInResponse(jwtToken, userFromDb), HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/user/signout")
