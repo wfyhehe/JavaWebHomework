@@ -48,10 +48,11 @@ public class UserController {
             HttpServletRequest request
     ) {
         Integer authority = (Integer) request.getAttribute("authority");
-        if (authority < UserAuthority.SUPER_ADMIN) {
+        String uid = (String) request.getAttribute("uid");
+        User user = userService.getUserByUsername(username);
+        if (authority < UserAuthority.SUPER_ADMIN && !user.getId().toString().equals(uid)) {
             return new ResponseEntity<>(new User(), HttpStatus.FORBIDDEN);
         }
-        User user = userService.getUserByUsername(username);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
