@@ -1,8 +1,8 @@
 CREATE TABLE t_document (
-  id          INT                   AUTO_INCREMENT PRIMARY KEY,
+  id          INTEGER PRIMARY KEY AUTOINCREMENT ,
   title       VARCHAR(255) NOT NULL,
   content     TEXT,
   create_time DATETIME,
-  status      TINYINT      NOT NULL, # 0:Pending, 1:Approved, 2:Denied
+  status      TINYINT      NOT NULL,
   deleted     BOOLEAN      NOT NULL DEFAULT FALSE
 );

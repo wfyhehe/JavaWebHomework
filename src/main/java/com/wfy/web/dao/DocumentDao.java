@@ -16,7 +16,7 @@ public interface DocumentDao {
     @Select("SELECT * FROM t_document INNER JOIN t_document_user INNER JOIN t_user " +
             "ON t_document.id = t_document_user.document_id AND " +
             "t_user.id = t_document_user.user_id " +
-            "WHERE t_document.deleted = false"
+            "WHERE t_document.deleted = 0"
     )
     @Results({
             @Result(property = "title", column = "title"),
@@ -32,7 +32,7 @@ public interface DocumentDao {
     @Select("SELECT * FROM t_document INNER JOIN t_document_user INNER JOIN t_user " +
             "ON t_document.id = t_document_user.document_id AND " +
             "t_user.id = t_document_user.user_id " +
-            "WHERE t_document.deleted = false " +
+            "WHERE t_document.deleted = 0 " +
             "AND t_user.id = #{id}"
     )
     @Results({
@@ -49,7 +49,7 @@ public interface DocumentDao {
     @Select("SELECT * FROM t_document INNER JOIN t_document_user INNER JOIN t_user " +
             "ON t_document.id = t_document_user.document_id AND " +
             "t_user.id = t_document_user.user_id " +
-            "WHERE t_document.deleted = false " +
+            "WHERE t_document.deleted = 0 " +
             "AND t_document.id = #{id}"
     )
     @Results({
@@ -99,13 +99,13 @@ public interface DocumentDao {
     void updateStatus(Document document);
 
     @Update("UPDATE t_document SET " +
-            "deleted=true " +
+            "deleted=1 " +
             "WHERE id =#{id}"
     )
     void delete(Long id);
 
     @Update("UPDATE t_document SET " +
-            "deleted=false " +
+            "deleted=0 " +
             "WHERE id =#{id}"
     )
     void restore(Long id);

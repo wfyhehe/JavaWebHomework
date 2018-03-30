@@ -1,11 +1,11 @@
 CREATE TABLE t_document_user (
-  id      INT PRIMARY KEY AUTO_INCREMENT,
+  id      INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INT NOT NULL,
   document_id INT NOT NULL,
   CONSTRAINT fk_du_user_id
-  FOREIGN KEY (user_id) REFERENCES j2ee.t_user (id),
+  FOREIGN KEY (user_id) REFERENCES t_user (id),
   CONSTRAINT fk_du_document_id
-  FOREIGN KEY (document_id) REFERENCES j2ee.t_document (id)
+  FOREIGN KEY (document_id) REFERENCES t_document (id)
 );
 
 CREATE INDEX index_du_user_id
