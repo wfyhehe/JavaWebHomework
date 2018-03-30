@@ -82,7 +82,7 @@ public class UserController {
     public ResponseEntity<ResponseMessage> signOut(HttpServletRequest request) {
         String uid = (String) request.getAttribute("uid");
         tokenService.delete(uid);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/user")

@@ -49,7 +49,7 @@ public class DocumentController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         documentService.create(document, uid);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseMessage(), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/api/document/{documentId}")

@@ -10,6 +10,10 @@ public class ResponseMessage {
         this.message = message;
     }
 
+    public ResponseMessage() {
+        this.message = "Ok";
+    }
+
     public String getMessage() {
         return message;
     }
