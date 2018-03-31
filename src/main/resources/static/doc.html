@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>文档管理系统</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
     <style>
         .btn {
             margin-left: 5px;
@@ -51,7 +50,7 @@
             {{/canEdit}}
             <p>{{createTime}}</p>
             <hr />
-            <span>{{status}}</span>
+            <span class="status">{{status}}</span>
             {{#canEdit}}
             <button onclick="reject();" class="btn btn-secondary" style="float: right;">驳回</button>
             <button onclick="approve();" class="btn btn-success" style="float: right;">通过</button>

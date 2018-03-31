@@ -16,7 +16,8 @@ public interface DocumentDao {
     @Select("SELECT * FROM t_document INNER JOIN t_document_user INNER JOIN t_user " +
             "ON t_document.id = t_document_user.document_id AND " +
             "t_user.id = t_document_user.user_id " +
-            "WHERE t_document.deleted = false"
+            "WHERE t_document.deleted = false " +
+            "ORDER BY t_document.create_time DESC"
     )
     @Results({
             @Result(property = "title", column = "title"),
